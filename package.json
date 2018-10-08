@@ -1,0 +1,23 @@
+{
+  "name": "understand_js",
+  "version": "1.0.0",
+  "description": "my collection of JS knowledgable things",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "jasmine-core": "^3.2.1",
+    "karma": "^3.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.2",
+    "puppeteer": "^1.9.0"
+  },
+  "scripts": {
+    "test": "node ./node_modules/karma/bin/karma start karma.conf.js  "
+  },
+  "author": "Ludwig Richter",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/luddwichr/understand_js.git"
+  }
+}
