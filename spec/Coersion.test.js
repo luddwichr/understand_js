@@ -15,5 +15,7 @@ equality” for this reason. (You don't know JS: Up & Going, p. 37)
  */
 describe("JavaScript's type coercion", () => {
 
+	it('should contain a test?', () => {
 
+	});
 });

@@ -1,9 +1,12 @@
 "use strict";
 
 describe("Globally available functions", () => {
-    it("is possible to delay execution of a function with `setTimeout(callback, ms)`", (done) => {
-        jasmine.clock().install();
 
+    beforeEach(() => {
+        jest.useFakeTimers();
+    });
+
+    it("is possible to delay execution of a function with `setTimeout(callback, ms)`", (done) => {
         let timeToWait = 200;
         let x = 0;
 
@@ -12,7 +15,7 @@ describe("Globally available functions", () => {
             done();
         }, timeToWait);
 
-        jasmine.clock().tick(timeToWait);
+        jest.advanceTimersByTime(timeToWait);
 
         expect(x).toBe(5);
         done();
