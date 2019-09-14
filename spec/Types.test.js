@@ -18,10 +18,10 @@ describe("Basic properties of JS types", () => {
         it("returns 'undefined' for `undefined`", () => {
             expect(typeof undefined).toBe("undefined");
         });
-        it("returns 'symbol' for symbols (new ES 6 feature)", () => {
+        it("returns 'symbol' for symbols", () => {
             expect(typeof Symbol()).toBe("symbol");
         });
-        it("returns 'object' for `null` (!!!)", () => {
+        it("returns 'object' for `null` (one of javascript's bugs!!!)", () => {
             expect(typeof null).toBe("object");
         });
         it("returns 'function' for functions", () => {

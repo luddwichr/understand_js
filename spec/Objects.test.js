@@ -12,7 +12,7 @@ describe("Objects", () => {
         expect(obj["test test"]).toBe(true);
     });
 
-    it(" is useful to use bracket notation if you want to access a property but the name is stored in a variable", () => {
+    it("is useful to use bracket notation if you want to access a property but the name is stored in a variable", () => {
         const obj = {a: 1, b: "test"};
         const b = "a";
         expect(obj[b]).toBe(1);

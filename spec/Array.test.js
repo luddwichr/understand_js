@@ -1,7 +1,7 @@
 "use strict";
 
 describe("Array features and gotchas", () => {
-    it("is possible to get an array's length via length property", () => {
+    it("is possible to get an array's length via the 'length' property", () => {
         const a = [1,2,3];
         expect(a.length).toBe(3);
     });
@@ -11,7 +11,8 @@ describe("Array features and gotchas", () => {
        expect(a[100]).toBeUndefined();
     });
 
-    it("is not possible to compare array contents using == or ===, since arrays are objects and are passed by reference", () => {
+    it("is not possible to compare array contents using == or ===," +
+        " since arrays are objects and are passed by reference", () => {
        const a = [1,2,3];
        const b = [1,2,3];
        expect(a == b).toBeFalsy();
@@ -24,7 +25,8 @@ describe("Array features and gotchas", () => {
         expect(a.length).toBe(3);
     });
 
-    it("should be avoided to use non-numeric indices", () => {
+    it("should be avoided to use non-numeric indices since they don't count into the length property" +
+        " (and it's not how arrays are meant to be used anyways)", () => {
         let a = [];
         a['xyz'] = 1;
         expect(a.length).toBe(0);

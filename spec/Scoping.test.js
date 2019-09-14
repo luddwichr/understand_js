@@ -51,7 +51,7 @@ describe("Scopes and Closures in JS", () => {
         expect(() => c).toThrowError(ReferenceError);
     });
 
-    it("is possible to prohibit creating variables in global scope by uisng `strict mode`", () => {
+    it("is possible to prohibit creating variables in global scope by using `strict mode`", () => {
         "use strict"; // turn on strict mode (turned on in this file anyways...)
         expect(() => {
             a = 1; // `var` missing

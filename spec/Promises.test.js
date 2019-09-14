@@ -12,26 +12,33 @@ class X {
 
 describe("Promises", () => {
     describe("Promise constructor", () => {
-        it("takes a function as input that takes two optional parameters as input", (done) => {
+        it("takes a function as input that takes two optional parameters as input," +
+            "where the 1st is called 'resolve' and can be called to signal successful execution", (done) => {
             const promise = new Promise(function (resolve) {
                 resolve(42);
             });
-            promise.then((result) => result === 42 ? done() : done.fail()).catch(done.fail);
+            promise
+                .then(result => result === 42 ? done() : done.fail())
+                .catch(done.fail);
         });
 
-        it("takes a function as input that takes two optional parameters as input", (done) => {
+        it("takes a function as input that takes two optional parameters as input" +
+            "where the 2nd is called 'reject' and can be called to signal failed execution", (done) => {
             const promise = new Promise(function (resolve, reject) {
                 reject(42);
             });
-            promise.then(() => done.fail()).catch((error) => error === 42 ? done() : done.fail()).catch(done.fail);
+            promise
+                .then(() => done.fail())
+                .catch(error => error === 42 ? done() : done.fail())
+                .catch(done.fail);
         });
 
-        it("", (done) => {
+        it("is is dangerous to pass method references that use 'this' since it's undefined if not bound", (done) => {
             const x = new X();
             Promise.resolve()
                 .then(x.doSomething)
-                .then(done.fail)
-                .catch((error) => {
+                .then(() => done.fail())
+                .catch(error => {
                     expect(error instanceof TypeError).toBeTruthy();
                     done();
                 })
@@ -43,7 +50,7 @@ describe("Promises", () => {
             const x = new X(someAttribute);
             Promise.resolve()
                 .then(x.doSomething.bind(x))
-                .then((result) => result === someAttribute ? done() : done.fail())
+                .then(result => result === someAttribute ? done() : done.fail())
                 .catch(done.fail);
         });
 
@@ -52,7 +59,7 @@ describe("Promises", () => {
             const x = new X(someAttribute);
             Promise.resolve()
                 .then(() => x.doSomething())
-                .then((result) => result === someAttribute ? done() : done.fail())
+                .then(result => result === someAttribute ? done() : done.fail())
                 .catch(done.fail);
         });
 
