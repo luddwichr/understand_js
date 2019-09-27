@@ -87,5 +87,94 @@ describe("JavaScript's type coercion", () => {
 			expect(String(Symbol("test"))).toEqual("Symbol(test)")
 		});
 	});
-	
+
+	describe('JSON.stringify and its differences to ToString', () => {
+		it('always results in values serialized as strings', () => {
+			expect(JSON.stringify(42)).toEqual("42");
+			expect(JSON.stringify(null)).toEqual("null");
+			expect(JSON.stringify(true)).toEqual("true");
+			expect(JSON.stringify([])).toEqual("[]");
+			expect(JSON.stringify("42")).toEqual("\"42\"");
+
+			expect(JSON.stringify([42, null, true, [], "42"]))
+				.toEqual("[42,null,true,[],\"42\"]");
+		});
+
+		it('does not serialize "unsafe" values', () => {
+			expect(JSON.stringify(undefined)).toEqual(undefined);
+			expect(JSON.stringify(() => {
+			})).toEqual(undefined);
+			expect(JSON.stringify(Symbol("test"))).toEqual(undefined);
+		});
+
+		it('serializes "unsafe" values in arrays as "null"', () => {
+			expect(JSON.stringify([1, undefined, () => {
+			}, Symbol("test"), 5]))
+				.toEqual("[1,null,null,null,5]");
+		});
+
+		it('only serializes "safe" object property values, putting double quotes around property names', () => {
+			expect(JSON.stringify({
+				a: 1, b: undefined, c: function () {
+				}, d: Symbol("test"), e: []
+			}))
+				.toEqual("{\"a\":1,\"e\":[]}");
+		});
+
+		it('throws an error if an object as circular references in it', () => {
+			const a = {};
+			a.y = {x: a};
+			expect(() => JSON.stringify(a)).toThrow(TypeError);
+		});
+
+		it('uses a toJSON() method for retrieving a JSON-safe version of an object, if present', () => {
+			// note: toJSON() needs not return a stringification representation, but a "safe" object version
+			const a = {secret: "don tell anyone!"};
+			a.y = {x: a};
+			a.toJSON = function () {
+				return {y: 'has cycles!'}
+			};
+			expect(JSON.stringify(a)).toEqual("{\"y\":\"has cycles!\"}");
+		});
+
+		describe('optional second "replacer" argument to filter property names (recursively!)', () => {
+
+			it('can be an array with property names that are eligible for serialization', () => {
+				const a = {public: true, secret: "don tell anyone!", child: {secret: ""}};
+				expect(JSON.stringify(a, ["public", "child"])).toEqual("{\"public\":true,\"child\":{}}");
+			});
+
+			it('can be a function taking a (key,value) pair, filtering out keys for which undefined is returned', () => {
+				const a = {public: true, secret: "don tell anyone!"};
+				expect(JSON.stringify(a, (key, value) => (key !== "secret") ? value : undefined))
+					.toEqual("{\"public\":true}");
+			});
+
+			it('passes array indices as numbers for key parameter', () => {
+				const a = {x: [1, 2, 3]};
+				expect(JSON.stringify(a, (key, value) => (key !== "1") ? value : undefined))
+					.toEqual("{\"x\":[1,null,3]}");
+			});
+
+
+			it('passes undefined as key parameter for object itself', () => {
+				const a = {b: "test"};
+				expect(JSON.stringify(a, (key, value) => (key) ? value : {c: "hi"}))
+					.toEqual("{\"c\":\"hi\"}");
+			});
+
+		});
+
+		describe('optional third "space" argument to indent JSON string', () => {
+			it('can be a number to indent with up to 10 spaces', () => {
+				expect(JSON.stringify({a: true}, null, 2)).toEqual("{\n  \"a\": true\n}");
+			});
+
+			it('can be a string to indent with the string a fill pattern', () => {
+				expect(JSON.stringify({a: true}, null, '***')).toEqual("{\n***\"a\": true\n}");
+			});
+		});
+
+	});
+
 });
