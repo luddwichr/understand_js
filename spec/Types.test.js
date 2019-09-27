@@ -142,4 +142,10 @@ describe("Basic properties of JS types", () => {
             expect(isNaN(new Date().toString())).toBeTruthy();
         });
     });
+
+    describe('+0 and -0', () => {
+        it('is not possible to distinguish +0 and -0 via equality comparison', () => {
+            expect(+0 === -0).toBeTruthy();
+        });
+    });
 });
