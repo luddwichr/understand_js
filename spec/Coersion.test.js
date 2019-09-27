@@ -15,7 +15,37 @@ equality” for this reason. (You don't know JS: Up & Going, p. 37)
  */
 describe("JavaScript's type coercion", () => {
 
-	describe('ToString value conversion', () => {
+	describe('ToPrimitive() abstract operation, used when an object should be coerced to a string or number', () => {
+
+		it('converts an object to the primitive returned by its valueOf() method', () => {
+			const a = {};
+			a.valueOf = () => "5";
+			expect(Number(a)).toEqual(5);
+			a.valueOf = () => 5;
+			expect(Number(a)).toEqual(5);
+			a.valueOf = () => false;
+			expect(Number(a)).toEqual(0);
+		});
+
+		it('converts an object to the string representation via toString(), ' +
+			'if valueOf() method does not exist or does not return a primitive value', () => {
+			const a = {};
+			a.toString = () => "5";
+			expect(Number(a)).toEqual(5);
+			expect(String(a)).toEqual("5");
+		});
+
+		it('throws a TypeError if neither of them can provide a primitive value', () => {
+			const a = {};
+			a.valueOf = undefined;
+			a.toString = undefined;
+			expect(() => Number(a)).toThrow(TypeError);
+			expect(() => String(a)).toThrow(TypeError);
+		});
+
+	});
+
+	describe('ToString abstract operation, used when a non-string value is coerced to a string representation', () => {
 		it('converts null to "null"', () => {
 			expect(String(null)).toEqual('null');
 		});
@@ -173,6 +203,56 @@ describe("JavaScript's type coercion", () => {
 			it('can be a string to indent with the string a fill pattern', () => {
 				expect(JSON.stringify({a: true}, null, '***')).toEqual("{\n***\"a\": true\n}");
 			});
+		});
+
+	});
+
+	describe('ToNumber value conversion, used when a non-number value is coerced to a number representation', () => {
+
+		it('converts true to 1', () => {
+			expect(Number(true)).toEqual(1);
+		});
+
+		it('converts false to 0', () => {
+			expect(Number(false)).toEqual(0);
+		});
+
+		it('converts undefined to NaN', () => {
+			expect(Number(undefined)).toBeNaN();
+		});
+
+		it('converts null to 0', () => {
+			expect(Number(null)).toEqual(0);
+		});
+
+		it('converts a string mostly like rules/syntax for numeric literals', () => {
+			expect(Number("12")).toEqual(12);
+			expect(Number(".34")).toEqual(.34);
+			expect(Number("12.34")).toEqual(12.34);
+			expect(Number("12e34")).toEqual(12e34);
+			expect(Number("0")).toEqual(0);
+			expect(Number("-0")).toEqual(-0);
+			expect(Number("someText")).toEqual(NaN);
+			expect(Number("123Text")).toEqual(NaN);
+			expect(Number("Text123")).toEqual(NaN);
+			expect(Number("Infinity")).toEqual(Infinity);
+			expect(Number("09")).toEqual(9); // octal 0-prefix is ignored
+		});
+
+		it('converts objects and arrays by first converting to their primitive value equivalent with ToPrimitive, ' +
+			'and then converting the resulting value according to the other ToNumber rules', () => {
+			const a = {};
+			a.valueOf = () => "5";
+			expect(Number(a)).toEqual(5);
+			a.valueOf = () => 5;
+			expect(Number(a)).toEqual(5);
+			a.valueOf = () => false;
+			expect(Number(a)).toEqual(0);
+			a.valueOf = undefined;
+			a.toString = () => "5";
+			expect(Number(a)).toEqual(5);
+			a.toString = undefined;
+			expect(() => Number(a)).toThrow(TypeError);
 		});
 
 	});
