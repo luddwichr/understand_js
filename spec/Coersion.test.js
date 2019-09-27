@@ -177,4 +177,32 @@ describe("JavaScript's type coercion", () => {
 
 	});
 
+	describe('loose equality ==', () => {
+
+		describe('string == number', () => {
+
+			it('coerces string values using ToNumber()', () => {
+				expect("42" == 42).toBeTruthy();
+				expect("42" == 43).toBeFalsy();
+			});
+		});
+
+		describe('* == Boolean', () => {
+
+			it('coerces boolean values using ToNumber()', () => {
+				expect("42" == true).toBeFalsy();
+				expect("42" == false).toBeFalsy();
+				expect("1" == true).toBeTruthy();
+				expect(1 == true).toBeTruthy();
+				expect([1] == true).toBeTruthy();
+				expect("0" == false).toBeTruthy();
+				expect(0 == false).toBeTruthy();
+				expect([0] == false).toBeTruthy();
+				expect(["0"] == false).toBeTruthy();
+				expect([] == false).toBeTruthy();
+			});
+
+		});
+
+	});
 });
