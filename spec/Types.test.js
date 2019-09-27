@@ -137,7 +137,7 @@ describe("Basic properties of JS types", () => {
             expect(isNaN('123ABC')).toBeTruthy(); // type coercion using Number('123ABC') fails
             expect(isNaN('123')).toBeFalsy();
             expect(isNaN('123')).toBeFalsy();
-            expect(isNaN('abc')).toBeTruthy(); // type coersion to number fails
+            expect(isNaN('abc')).toBeTruthy(); // type coercion to number fails
             expect(isNaN(new Date())).toBeFalsy();
             expect(isNaN(new Date().toString())).toBeTruthy();
         });
