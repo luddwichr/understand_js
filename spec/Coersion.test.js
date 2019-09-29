@@ -257,6 +257,25 @@ describe("JavaScript's type coercion", () => {
 
 	});
 
+	describe('ToBoolean, used when a non-boolean value is coerced to a boolean representation', () => {
+		it('converts all falsy values to false', () => {
+				expect(Boolean(+0)).toEqual(false);
+				expect(Boolean(-0)).toEqual(false);
+				expect(Boolean(NaN)).toEqual(false);
+				expect(Boolean('')).toEqual(false);
+				expect(Boolean(null)).toEqual(false);
+				expect(Boolean(undefined)).toEqual(false);
+				expect(Boolean(document.all)).toEqual(false);
+		});
+
+		it('converts any non-falsy value to true', () => {
+			expect(Boolean([])).toEqual(true);
+			expect(Boolean({})).toEqual(true);
+			expect(Boolean(() => {})).toEqual(true);
+			// ...
+		});
+	});
+
 	describe('loose equality ==', () => {
 
 		describe('string == number', () => {
