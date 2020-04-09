@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
-    "jest": "^24.8.0"
+    "jest": "^25.2.7"
   },
   "scripts": {
     "test": "jest"
